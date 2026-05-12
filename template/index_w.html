@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>AI Marketing Kit Generator</title>
+
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Markdown Renderer -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            overflow-x: hidden;
+        }
+
+        /* Glassmorphism */
+        .glass {
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        /* Loader */
+        .loader {
+            border-top-color: #818cf8;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Scrollbar */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(99, 102, 241, 0.5);
+            border-radius: 20px;
+        }
+
+        /* Markdown Styling */
+        .prose h1,
+        .prose h2,
+        .prose h3,
+        .prose h4 {
+            color: #c4b5fd;
+            margin-top: 1.5rem;
+        }
+
+        .prose p {
+            color: #d1d5db;
+            line-height: 1.9;
+        }
+
+        .prose li {
+            color: #d1d5db;
+            margin: 8px 0;
+        }
+
+        .prose strong {
+            color: white;
+        }
+
+        .prose code {
+            background: rgba(255, 255, 255, 0.1);
+            color: #f9fafb;
+            padding: 3px 8px;
+            border-radius: 6px;
+        }
+
+        .prose blockquote {
+            border-left: 4px solid #818cf8;
+            padding-left: 16px;
+            color: #cbd5e1;
+        }
+
+        /* Glow */
+        .glow {
+            box-shadow:
+                0 0 20px rgba(99, 102, 241, 0.3),
+                0 0 40px rgba(99, 102, 241, 0.15);
+        }
+
+        /* Floating Animation */
+        .float {
+            animation: floating 4s ease-in-out infinite;
+        }
+
+        @keyframes floating {
+            0% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+
+            100% {
+                transform: translateY(0px);
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-900 text-white min-h-screen font-sans">
+
+    <!-- Background Blur Effects -->
+    <div class="absolute top-0 left-0 w-72 h-72 bg-indigo-500/20 blur-3xl rounded-full"></div>
+    <div class="absolute bottom-0 right-0 w-72 h-72 bg-pink-500/20 blur-3xl rounded-full"></div>
+
+    <div class="relative max-w-7xl mx-auto px-6 py-10">
+
+        <!-- Header -->
+        <div class="text-center mb-14">
+
+            <div
+                class="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-indigo-500/10 border border-indigo-400/20 text-indigo-300 text-sm mb-6">
+                ✨ AI Powered Content Generation
+            </div>
+
+            <h1 class="text-5xl md:text-7xl font-black leading-tight mb-6">
+                AI Marketing
+                <span
+                    class="bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+                    Kit Generator
+                </span>
+            </h1>
+
+            <p class="text-slate-300 text-lg max-w-3xl mx-auto leading-relaxed">
+                Upload a product image and instantly generate stunning marketing copy,
+                ad content, and AI-powered promotional banners.
+            </p>
+
+        </div>
+
+        <!-- Main Container -->
+        <div class="glass rounded-[32px] p-8 shadow-2xl">
+
+            <!-- Upload Area -->
+            <div id="uploadBox"
+                class="border-2 border-dashed border-indigo-400/30 rounded-3xl p-10 md:p-16 bg-gradient-to-br from-indigo-500/10 to-purple-500/10 hover:scale-[1.01] transition duration-300">
+
+                <div class="flex flex-col items-center justify-center text-center">
+
+                    <input type="file" id="imageInput" accept="image/*" class="hidden">
+
+                    <label for="imageInput" class="cursor-pointer">
+
+                        <div
+                            class="w-28 h-28 rounded-full bg-indigo-500/20 flex items-center justify-center mx-auto mb-6 float glow">
+
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                class="h-14 w-14 text-indigo-300"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor">
+
+                                <path stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                            </svg>
+
+                        </div>
+
+                        <h2 class="text-3xl font-bold mb-3">
+                            Upload Product Image
+                        </h2>
+
+                        <p class="text-slate-400 text-lg">
+                            Drag & Drop or Click to Browse
+                        </p>
+
+                        <p class="text-slate-500 text-sm mt-3">
+                            PNG • JPG • WEBP
+                        </p>
+
+                    </label>
+
+                    <!-- Preview -->
+                    <div id="previewContainer" class="hidden mt-10">
+
+                        <img id="imagePreview"
+                            class="max-h-80 rounded-3xl border border-white/10 shadow-2xl hover:scale-105 transition duration-300">
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Generate Button -->
+            <button id="generateBtn"
+                class="w-full mt-8 bg-gradient-to-r from-indigo-500 to-pink-500 hover:from-indigo-600 hover:to-pink-600 py-5 rounded-2xl text-xl font-bold shadow-lg shadow-indigo-500/30 transition duration-300 hover:scale-[1.02] active:scale-100">
+
+                🚀 Generate Marketing Kit
+
+            </button>
+
+            <!-- Loading -->
+            <div id="loading" class="hidden flex flex-col items-center py-20">
+
+                <div class="loader rounded-full border-4 border-white/10 h-24 w-24 mb-6"></div>
+
+                <h3 class="text-3xl font-bold text-indigo-300 mb-2">
+                    AI is Generating...
+                </h3>
+
+                <p class="text-slate-400 text-lg">
+                    Creating copywriting & promotional banner
+                </p>
+
+            </div>
+
+            <!-- Result Section -->
+            <div id="resultSection" class="hidden mt-16">
+
+                <div class="grid grid-cols-1 xl:grid-cols-2 gap-8">
+
+                    <!-- Marketing Content -->
+                    <div class="glass rounded-3xl p-8 shadow-xl">
+
+                        <div class="flex items-center justify-between mb-8">
+
+                            <h2 class="text-3xl font-black text-indigo-300">
+                                📝 Marketing Copy
+                            </h2>
+
+                            <div
+                                class="px-4 py-2 rounded-full bg-indigo-500/10 border border-indigo-400/20 text-indigo-300 text-sm">
+                                AI Generated
+                            </div>
+
+                        </div>
+
+                        <div id="output"
+                            class="prose prose-invert max-w-none overflow-y-auto max-h-[700px] pr-2 custom-scrollbar">
+                        </div>
+
+                    </div>
+
+                    <!-- Banner -->
+                    <div class="glass rounded-3xl p-8 shadow-xl">
+
+                        <div class="flex items-center justify-between mb-8">
+
+                            <h2 class="text-3xl font-black text-pink-300">
+                                🎨 Promotional Banner
+                            </h2>
+
+                            <div
+                                class="px-4 py-2 rounded-full bg-pink-500/10 border border-pink-400/20 text-pink-300 text-sm">
+                                AI Visual
+                            </div>
+
+                        </div>
+
+                        <div class="overflow-hidden rounded-3xl group">
+
+                            <img id="bannerImage"
+                                class="rounded-3xl shadow-2xl w-full h-auto transition duration-500 group-hover:scale-105"
+                                alt="Generated Banner">
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+        const imageInput = document.getElementById('imageInput');
+        const imagePreview = document.getElementById('imagePreview');
+        const previewContainer = document.getElementById('previewContainer');
+
+        const generateBtn = document.getElementById('generateBtn');
+
+        const loading = document.getElementById('loading');
+
+        const resultSection = document.getElementById('resultSection');
+
+        const output = document.getElementById('output');
+
+        const bannerImage = document.getElementById('bannerImage');
+
+        // Preview Uploaded Image
+        imageInput.addEventListener('change', (e) => {
+
+            const file = e.target.files[0];
+
+            if (!file) return;
+
+            const reader = new FileReader();
+
+            reader.onload = (event) => {
+
+                imagePreview.src = event.target.result;
+
+                previewContainer.classList.remove('hidden');
+
+            };
+
+            reader.readAsDataURL(file);
+
+        });
+
+        // Generate Marketing Content
+        generateBtn.addEventListener('click', async () => {
+
+            const file = imageInput.files[0];
+
+            if (!file) {
+
+                alert("Please upload a product image first!");
+
+                return;
+            }
+
+            const formData = new FormData();
+
+            formData.append("file", file);
+
+            // Loading State
+            generateBtn.disabled = true;
+
+            generateBtn.innerHTML = "⏳ Generating...";
+
+            loading.classList.remove('hidden');
+
+            resultSection.classList.add('hidden');
+
+            try {
+
+                const response = await fetch("http://127.0.0.1:8000/generate-marketing", {
+                    method: "POST",
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+
+                    // Markdown Render
+                    output.innerHTML = marked.parse(data.marketing_content);
+
+                    // Banner Image
+                    bannerImage.src = data.banner_url + "?t=" + new Date().getTime();
+
+                    resultSection.classList.remove('hidden');
+
+                    // Smooth Scroll
+                    resultSection.scrollIntoView({
+                        behavior: "smooth"
+                    });
+
+                } else {
+
+                    alert("Server Error: " + (data.detail || "Something went wrong."));
+
+                }
+
+            } catch (error) {
+
+                console.error("Connection Error:", error);
+
+                alert("Could not connect to backend. Ensure FastAPI is running.");
+
+            } finally {
+
+                generateBtn.disabled = false;
+
+                generateBtn.innerHTML = "🚀 Generate Marketing Kit";
+
+                loading.classList.add('hidden');
+
+            }
+
+        });
+    </script>
+
+</body>
+
+</html>

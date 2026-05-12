@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>AI Marketing Kit Generator</title>
+
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Markdown Renderer -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <style>
+        .loader {
+            border-top-color: #3498db;
+            animation: spinner 1.5s linear infinite;
+        }
+
+        @keyframes spinner {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 min-h-screen font-sans">
+
+    <div class="max-w-4xl mx-auto py-12 px-4">
+
+        <!-- Header -->
+        <header class="text-center mb-12">
+            <h1 class="text-4xl font-extrabold text-gray-900 mb-2">
+                🚀 Marketing Kit Pro
+            </h1>
+
+            <p class="text-gray-600">
+                Upload a product image and generate AI-powered marketing content.
+            </p>
+        </header>
+
+        <!-- Main Card -->
+        <main class="bg-white rounded-xl shadow-md p-8">
+
+            <!-- Upload Section -->
+            <div
+                class="flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-lg p-6 bg-gray-50 hover:bg-gray-100 transition-colors"
+            >
+
+                <input
+                    type="file"
+                    id="imageInput"
+                    accept="image/*"
+                    class="hidden"
+                />
+
+                <label
+                    for="imageInput"
+                    class="cursor-pointer flex flex-col items-center"
+                >
+                    <svg
+                        class="w-12 h-12 text-gray-400 mb-3"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                        ></path>
+                    </svg>
+
+                    <span class="text-sm text-gray-600">
+                        Click to upload product image
+                    </span>
+                </label>
+
+                <!-- Image Preview -->
+                <div id="previewContainer" class="mt-4 hidden">
+                    <img
+                        id="imagePreview"
+                        class="max-h-64 rounded-lg shadow-sm"
+                    />
+                </div>
+            </div>
+
+            <!-- Generate Button -->
+            <button
+                id="generateBtn"
+                class="w-full mt-6 bg-indigo-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+            >
+                Generate Marketing Kit
+            </button>
+
+            <!-- Loading -->
+            <div
+                id="loading"
+                class="hidden flex flex-col items-center mt-8"
+            >
+                <div
+                    class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12 mb-4"
+                ></div>
+
+                <p class="text-indigo-600 font-medium">
+                    Analyzing image and generating content...
+                </p>
+            </div>
+
+            <!-- Result Section -->
+            <div
+                id="resultSection"
+                class="mt-10 hidden border-t pt-8"
+            >
+                <h3 class="text-2xl font-bold text-gray-800 mb-6">
+                    📦 Generated Marketing Kit
+                </h3>
+
+                <!-- Markdown Render Output -->
+                <div
+                    id="output"
+                    class="prose prose-indigo lg:prose-lg max-w-none bg-gray-50 p-6 rounded-xl text-gray-800 shadow-sm"
+                ></div>
+            </div>
+
+        </main>
+    </div>
+
+    <script>
+
+        const imageInput = document.getElementById('imageInput');
+        const preview = document.getElementById('imagePreview');
+        const previewContainer = document.getElementById('previewContainer');
+        const generateBtn = document.getElementById('generateBtn');
+        const loading = document.getElementById('loading');
+        const resultSection = document.getElementById('resultSection');
+        const output = document.getElementById('output');
+
+        // Image Preview
+        imageInput.addEventListener('change', (e) => {
+
+            const file = e.target.files[0];
+
+            if (file) {
+
+                const reader = new FileReader();
+
+                reader.onload = (e) => {
+                    preview.src = e.target.result;
+                    previewContainer.classList.remove('hidden');
+                };
+
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Generate Marketing Kit
+        generateBtn.addEventListener('click', async () => {
+
+            const file = imageInput.files[0];
+
+            if (!file) {
+                alert('Please select an image first!');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            // Reset UI
+            generateBtn.disabled = true;
+
+            loading.classList.remove('hidden');
+
+            resultSection.classList.add('hidden');
+
+            output.innerHTML = "";
+
+            try {
+
+                const response = await fetch(
+                    'http://127.0.0.1:8000/generate-marketing',
+                    {
+                        method: 'POST',
+                        body: formData
+                    }
+                );
+
+                const data = await response.json();
+
+                if (response.ok) {
+
+                    // Convert Markdown → HTML
+                    output.innerHTML = marked.parse(data.result);
+
+                    resultSection.classList.remove('hidden');
+
+                } else {
+
+                    alert('Error: ' + data.detail);
+                }
+
+            } catch (error) {
+
+                console.error(error);
+
+                alert('Connection failed. Is the FastAPI server running?');
+
+            } finally {
+
+                generateBtn.disabled = false;
+
+                loading.classList.add('hidden');
+            }
+        });
+
+    </script>
+
+</body>
+</html>
